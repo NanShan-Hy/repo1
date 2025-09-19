@@ -1,0 +1,158 @@
+<!DOCTYPE html><!-- 声明使用HTML5文档类型，确保浏览器以标准模式解析页面 -->
+<html lang="zh-CN"><!-- 指定页面的语言环境为简体中文 -->
+<head><!-- 页面头部信息的开始 -->
+  <meta charset="UTF-8"><!-- 设置页面的字符编码为UTF-8以支持中文显示 -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"><!-- 兼容性设置，确保IE浏览器使用最新的渲染模式 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><!-- 设置视口使页面在移动端设备上自适应显示 -->
+  <title>云端24小时在线服务平台</title><!-- 定义浏览器标签页的标题 -->
+  <meta name="description" content="一个可以直接部署在GitHub Pages上的24小时在线服务展示平台。"><!-- 提供页面的描述以便搜索引擎收录 -->
+  <link rel="stylesheet" href="assets/css/style.css"><!-- 引入站点的主样式表 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"><!-- 提前连接到Google字体服务器以优化字体加载 -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><!-- 提前连接到字体资源域名并启用跨域支持 -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet"><!-- 引入思源黑体以获得更好的中文显示效果 -->
+  <script src="assets/js/main.js" defer></script><!-- 延迟加载主脚本以避免阻塞页面渲染 -->
+</head><!-- 页面头部信息的结束 -->
+<body><!-- 页面主体内容的开始 -->
+  <header class="site-header"><!-- 定义页面顶部区域，包含Logo与导航链接 -->
+    <div class="branding"><!-- 定义品牌信息的容器 -->
+      <h1 class="site-title">云端值守中心</h1><!-- 显示站点的主标题 -->
+      <p class="site-subtitle">GitHub Pages驱动的全天候服务</p><!-- 显示站点的副标题 -->
+    </div><!-- 品牌信息容器的结束 -->
+    <nav class="site-nav"><!-- 定义顶部导航栏 -->
+      <a href="#status" class="nav-link">运行状态</a><!-- 导航链接指向运行状态模块 -->
+      <a href="#features" class="nav-link">核心功能</a><!-- 导航链接指向核心功能模块 -->
+      <a href="#timeline" class="nav-link">运维节奏</a><!-- 导航链接指向运维节奏模块 -->
+      <a href="#support" class="nav-link">支援服务</a><!-- 导航链接指向支援服务模块 -->
+      <a href="#knowledge" class="nav-link">知识库</a><!-- 导航链接指向知识库模块 -->
+    </nav><!-- 顶部导航栏的结束 -->
+    <button id="toggle-theme" class="theme-button">切换主题</button><!-- 提供主题切换按钮以提升可读性 -->
+  </header><!-- 页面顶部区域的结束 -->
+  <main class="main-content"><!-- 定义页面的主体内容区域 -->
+    <section class="hero" id="home"><!-- 定义首屏英雄版块用于展示主诉求 -->
+      <div class="hero-text"><!-- 英雄版块的文字容器 -->
+        <h2>24小时不间断的托管服务</h2><!-- 强调平台的核心能力 -->
+        <p>借助GitHub Pages部署静态服务，结合自动化脚本完成运维巡检，让企业官网随时在线、全球可达。</p><!-- 介绍部署方式与能力优势 -->
+        <div class="hero-actions"><!-- 定义首屏按钮区域 -->
+          <a class="primary-action" href="#deployment">查看部署步骤</a><!-- 引导用户了解部署流程 -->
+          <a class="secondary-action" href="#support">申请即时支援</a><!-- 引导用户跳转到支援模块 -->
+        </div><!-- 首屏按钮区域的结束 -->
+      </div><!-- 英雄版块文字容器的结束 -->
+      <div class="hero-visual"><!-- 英雄版块的可视化区域 -->
+        <div class="status-pill">GitHub Pages · 100%在线</div><!-- 展示服务状态的标签 -->
+        <p class="hero-note">自动健康检查每15分钟一次，最新巡检：<span id="last-check-time">-</span></p><!-- 提示自动巡检频率与最近巡检时间 -->
+      </div><!-- 英雄版块可视化区域的结束 -->
+    </section><!-- 首屏英雄版块的结束 -->
+    <section class="status" id="status"><!-- 定义运行状态展示模块 -->
+      <h2>运行总览</h2><!-- 模块标题 -->
+      <div class="status-grid"><!-- 状态信息的网格布局容器 -->
+        <article class="status-card"><!-- 单个状态卡片的开始 -->
+          <h3>服务可用性</h3><!-- 状态卡片标题 -->
+          <p id="service-status" class="status-text">系统初始化中...</p><!-- 用于展示当前服务状态的文本 -->
+          <div class="uptime-meter"><!-- 定义可用率进度条容器 -->
+            <div id="uptime-bar" class="uptime-bar"></div><!-- 实际显示可用率的进度条 -->
+          </div><!-- 可用率进度条容器的结束 -->
+          <p id="uptime-percentage" class="uptime-info">--%</p><!-- 展示可用率数值的占位文本 -->
+        </article><!-- 单个状态卡片的结束 -->
+        <article class="status-card"><!-- 第二个状态卡片的开始 -->
+          <h3>实时运营</h3><!-- 状态卡片标题 -->
+          <p>当前北京时间：<span id="current-time">--:--:--</span></p><!-- 展示实时北京时间 -->
+          <p>自动脚本：<span id="automation-status">初始化...</span></p><!-- 展示自动脚本的状态 -->
+          <p>下一次巡检倒计时：<span id="next-check">--分--秒</span></p><!-- 展示下一次巡检的倒计时 -->
+        </article><!-- 第二个状态卡片的结束 -->
+        <article class="status-card"><!-- 第三个状态卡片的开始 -->
+          <h3>服务加速</h3><!-- 状态卡片标题 -->
+          <ul class="status-list"><!-- 展示加速策略的列表 -->
+            <li>CDN全局分发：GitHub边缘节点</li><!-- 提示CDN分发策略 -->
+            <li>多区域缓存：北美、欧洲、亚洲</li><!-- 提示缓存覆盖区域 -->
+            <li>自愈策略：静态备援+监控告警</li><!-- 提示自愈与告警机制 -->
+          </ul><!-- 加速策略列表的结束 -->
+        </article><!-- 第三个状态卡片的结束 -->
+      </div><!-- 状态信息网格布局容器的结束 -->
+    </section><!-- 运行状态展示模块的结束 -->
+    <section class="features" id="features"><!-- 定义核心功能展示模块 -->
+      <h2>核心功能矩阵</h2><!-- 模块标题 -->
+      <div class="feature-grid"><!-- 功能点网格容器 -->
+        <article class="feature-card"><!-- 功能卡片的开始 -->
+          <h3>静态部署</h3><!-- 功能卡片标题 -->
+          <p>基于GitHub Actions自动构建并发布到Pages，实现零运维上线。</p><!-- 描述静态部署功能 -->
+        </article><!-- 功能卡片的结束 -->
+        <article class="feature-card"><!-- 第二个功能卡片的开始 -->
+          <h3>健康巡检</h3><!-- 功能卡片标题 -->
+          <p>集成自动化检测脚本，保证页面内容与配置长期处于最佳状态。</p><!-- 描述健康巡检功能 -->
+        </article><!-- 第二个功能卡片的结束 -->
+        <article class="feature-card"><!-- 第三个功能卡片的开始 -->
+          <h3>可用性报告</h3><!-- 功能卡片标题 -->
+          <p>自动计算近30天可用率并生成报表，支持导出备份。</p><!-- 描述可用性报告功能 -->
+        </article><!-- 第三个功能卡片的结束 -->
+        <article class="feature-card"><!-- 第四个功能卡片的开始 -->
+          <h3>客户支持</h3><!-- 功能卡片标题 -->
+          <p>内置待办清单与反馈记录模块，保障事件全流程可追踪。</p><!-- 描述客户支持功能 -->
+        </article><!-- 第四个功能卡片的结束 -->
+      </div><!-- 功能点网格容器的结束 -->
+    </section><!-- 核心功能展示模块的结束 -->
+    <section class="timeline" id="timeline"><!-- 定义运维节奏展示模块 -->
+      <h2>全天候运维节奏</h2><!-- 模块标题 -->
+      <ul class="timeline-list" id="timeline-list"><!-- 运维节奏列表容器，内容由脚本动态渲染 -->
+      </ul><!-- 运维节奏列表容器的结束 -->
+    </section><!-- 运维节奏展示模块的结束 -->
+    <section class="deployment" id="deployment"><!-- 定义部署步骤模块 -->
+      <h2>GitHub Pages部署步骤</h2><!-- 模块标题 -->
+      <ol class="deployment-steps"><!-- 部署步骤有序列表 -->
+        <li>Fork或克隆本仓库，提交自定义内容后推送到main分支。</li><!-- 第一步说明代码来源 -->
+        <li>在仓库Settings中启用Pages，选择main分支与根目录作为发布源。</li><!-- 第二步说明Pages的启用方式 -->
+        <li>等待GitHub构建完成后，即可通过自动生成的域名实现全球访问。</li><!-- 第三步说明完成后的访问方式 -->
+      </ol><!-- 部署步骤有序列表的结束 -->
+    </section><!-- 部署步骤模块的结束 -->
+    <section class="support" id="support"><!-- 定义支援服务模块 -->
+      <h2>在线支援中心</h2><!-- 模块标题 -->
+      <form id="support-form" class="support-form"><!-- 支援表单的开始，用于收集访客请求 -->
+        <label for="requester">联系人</label><!-- 表单标签：联系人 -->
+        <input type="text" id="requester" name="requester" placeholder="填写您的姓名" required><!-- 输入框：联系人姓名 -->
+        <label for="contact">联系方式</label><!-- 表单标签：联系方式 -->
+        <input type="email" id="contact" name="contact" placeholder="邮箱或其他联系方式" required><!-- 输入框：联系方式 -->
+        <label for="issue">需求描述</label><!-- 表单标签：需求描述 -->
+        <textarea id="issue" name="issue" rows="4" placeholder="请描述需要支持的问题" required></textarea><!-- 文本域：问题描述 -->
+        <button type="submit" class="primary-action">提交请求</button><!-- 提交按钮 -->
+      </form><!-- 支援表单的结束 -->
+      <div class="support-log"><!-- 支援记录展示容器 -->
+        <h3>最近的支援记录</h3><!-- 支援记录标题 -->
+        <ul id="support-history" class="support-history"><!-- 支援记录列表，脚本会动态填充 -->
+        </ul><!-- 支援记录列表的结束 -->
+      </div><!-- 支援记录展示容器的结束 -->
+    </section><!-- 支援服务模块的结束 -->
+    <section class="knowledge" id="knowledge"><!-- 定义知识库模块 -->
+      <h2>知识库精选</h2><!-- 模块标题 -->
+      <div class="knowledge-grid"><!-- 知识库条目的网格容器 -->
+        <article class="knowledge-card"><!-- 知识卡片的开始 -->
+          <h3>自动化巡检脚本模板</h3><!-- 知识卡片标题 -->
+          <p>使用GitHub Actions执行定时脚本，实现服务状态的周期性检查。</p><!-- 知识卡片正文 -->
+          <a href="https://docs.github.com/zh/actions" target="_blank" rel="noopener" class="secondary-action">查看教程</a><!-- 外链至GitHub Actions文档 -->
+        </article><!-- 知识卡片的结束 -->
+        <article class="knowledge-card"><!-- 第二个知识卡片的开始 -->
+          <h3>DNS加速优化指南</h3><!-- 知识卡片标题 -->
+          <p>通过自定义域名与权威DNS策略缩短首字节时间。</p><!-- 知识卡片正文 -->
+          <a href="https://docs.github.com/zh/pages" target="_blank" rel="noopener" class="secondary-action">部署指引</a><!-- 外链至GitHub Pages文档 -->
+        </article><!-- 第二个知识卡片的结束 -->
+        <article class="knowledge-card"><!-- 第三个知识卡片的开始 -->
+          <h3>零信任安全方案</h3><!-- 知识卡片标题 -->
+          <p>结合Cloudflare与GitHub保护静态资源免受滥用。</p><!-- 知识卡片正文 -->
+          <a href="https://www.cloudflare.com/zh-cn/learning/" target="_blank" rel="noopener" class="secondary-action">安全学习</a><!-- 外链至安全学习资源 -->
+        </article><!-- 第三个知识卡片的结束 -->
+      </div><!-- 知识库条目网格容器的结束 -->
+    </section><!-- 知识库模块的结束 -->
+  </main><!-- 页面主体内容区域的结束 -->
+  <footer class="site-footer"><!-- 定义页面底部区域 -->
+    <p>© <span id="current-year">2024</span> 云端值守中心 · 始终在线</p><!-- 显示版权信息与当前年份 -->
+    <p>构建于GitHub Pages · 结合自动化监控实现24小时服务。</p><!-- 提供部署与能力说明 -->
+  </footer><!-- 页面底部区域的结束 -->
+  <div class="floating-action" id="floating-action"><!-- 定义浮动操作面板容器 -->
+    <button id="toggle-panel" class="floating-button">运维看板</button><!-- 提供展开浮动面板的按钮 -->
+    <div class="floating-panel" id="floating-panel"><!-- 浮动面板内容容器的开始 -->
+      <h4>实时指令面板</h4><!-- 浮动面板标题 -->
+      <p id="panel-status">准备就绪</p><!-- 展示浮动面板当前状态 -->
+      <ul id="panel-tasks" class="panel-tasks"><!-- 浮动面板任务列表容器，脚本会填充内容 -->
+      </ul><!-- 浮动面板任务列表容器的结束 -->
+    </div><!-- 浮动面板内容容器的结束 -->
+  </div><!-- 浮动操作面板容器的结束 -->
+</body><!-- 页面主体内容的结束 -->
+</html><!-- HTML文档的结束 -->
