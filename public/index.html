@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>文本资源整合展示</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="hero">
+      <h1>文本资源整合项目</h1>
+      <p>此项目将前两次任务的文本内容整合为一个可运行的 Web 应用。</p>
+    </header>
+
+    <main class="container">
+      <section>
+        <h2>可用文本资源</h2>
+        <p>点击右侧按钮即可查看具体内容。</p>
+        <div id="resource-list" class="resource-list"></div>
+      </section>
+
+      <section>
+        <h2>内容预览</h2>
+        <article id="resource-detail" class="resource-detail">
+          <p>请选择左侧的文本资源以查看详情。</p>
+        </article>
+      </section>
+    </main>
+
+    <footer>
+      <p>更多开发细节请阅读 <a href="/docs/开发文档.html" target="_blank">《开发文档》</a>。</p>
+    </footer>
+
+    <script type="module">
+      const listEl = document.getElementById('resource-list');
+      const detailEl = document.getElementById('resource-detail');
+
+      const renderList = (resources) => {
+        listEl.innerHTML = '';
+        if (!resources.length) {
+          listEl.innerHTML = '<p class="empty">暂时没有可用的文本文件。</p>';
+          return;
+        }
+
+        resources.forEach((resource) => {
+          const card = document.createElement('div');
+          card.className = 'resource-card';
+          card.innerHTML = `
+            <h3>${resource.name}</h3>
+            <p>文件名：${resource.fileName}</p>
+            <button data-name="${resource.name}">查看内容</button>
+          `;
+          listEl.appendChild(card);
+        });
+      };
+
+      const renderDetail = (resource) => {
+        if (!resource) {
+          detailEl.innerHTML = '<p class="empty">未找到对应的文本内容。</p>';
+          return;
+        }
+
+        const lines = resource.lines
+          .map((line) => `<li><code>${line || '&nbsp;'}</code></li>`) // 显示空行
+          .join('');
+
+        detailEl.innerHTML = `
+          <h3>${resource.name}</h3>
+          <p class="file-name">${resource.fileName}</p>
+          <ol class="line-list">${lines}</ol>
+        `;
+      };
+
+      const fetchResources = async () => {
+        try {
+          const res = await fetch('/api/texts');
+          const data = await res.json();
+          renderList(data);
+        } catch (error) {
+          console.error(error);
+          listEl.innerHTML = '<p class="error">加载列表失败，请刷新页面。</p>';
+        }
+      };
+
+      listEl.addEventListener('click', async (event) => {
+        const button = event.target.closest('button[data-name]');
+        if (!button) return;
+
+        const { name } = button.dataset;
+        button.disabled = true;
+        button.textContent = '加载中...';
+
+        try {
+          const res = await fetch(`/api/texts/${name}`);
+          if (!res.ok) {
+            renderDetail(null);
+            return;
+          }
+          const data = await res.json();
+          renderDetail(data);
+        } catch (error) {
+          console.error(error);
+          detailEl.innerHTML = '<p class="error">加载文本内容失败。</p>';
+        } finally {
+          button.disabled = false;
+          button.textContent = '查看内容';
+        }
+      });
+
+      fetchResources();
+    </script>
+  </body>
+</html>
