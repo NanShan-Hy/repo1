@@ -1,0 +1,24 @@
+{
+  "name": "text-web-project",
+  "version": "1.0.0",
+  "description": "将前两次任务的文本资源整合为可运行的 Express Web 项目",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon src/index.js",
+    "start": "node src/index.js"
+  },
+  "keywords": [
+    "express",
+    "web",
+    "demo"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}

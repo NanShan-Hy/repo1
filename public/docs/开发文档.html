@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>开发文档 - 文本资源整合 Web 项目</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <style>
+      main {
+        max-width: 960px;
+        margin: 0 auto;
+        background: #fff;
+        border-radius: 12px;
+        padding: 32px;
+        box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+      }
+      pre {
+        background: #1f2933;
+        color: #e5e7eb;
+        padding: 16px;
+        border-radius: 8px;
+        overflow-x: auto;
+      }
+      code {
+        font-family: SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      th,
+      td {
+        border: 1px solid #e5e7eb;
+        padding: 8px 12px;
+        text-align: left;
+      }
+      th {
+        background: #f3f4f6;
+      }
+      h1,
+      h2,
+      h3 {
+        color: #111827;
+      }
+      a {
+        color: #5469d4;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="hero">
+      <h1>文本资源整合 Web 项目开发文档</h1>
+      <p>本页面为 Markdown 文档的可浏览版本，便于部署后在线查看。</p>
+    </header>
+    <main>
+      <section>
+        <h2>项目简介</h2>
+        <p>该项目基于此前两次任务中提交的文本文件，构建了一个开箱即用的 Express Web 应用：</p>
+        <ul>
+          <li>后端提供统一的 <code>/api</code> 接口，用于读取 <code>data/</code> 目录中的文本文件。</li>
+          <li>前端使用原生 HTML/CSS/JavaScript，展示可用文本列表并支持在线预览。</li>
+          <li>内置健康检查、错误处理和前端静态资源服务。</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>系统要求</h2>
+        <ul>
+          <li>Node.js &gt;= 18</li>
+          <li>npm &gt;= 9（Node.js 自带）</li>
+          <li>推荐在 macOS、Linux 或 Windows 10+ 环境中开发与部署。</li>
+        </ul>
+        <blockquote>
+          <p>使用 <code>node -v</code> 和 <code>npm -v</code> 可快速确认当前环境版本。</p>
+        </blockquote>
+      </section>
+
+      <section>
+        <h2>快速开始</h2>
+        <ol>
+          <li>
+            <strong>安装依赖</strong>
+            <pre><code>npm install</code></pre>
+          </li>
+          <li>
+            <strong>开发模式运行</strong>（带文件变更监听）
+            <pre><code>npm run dev</code></pre>
+            <p>默认监听 <a href="http://localhost:3000" target="_blank">http://localhost:3000</a>。</p>
+          </li>
+          <li>
+            <strong>生产模式运行</strong>
+            <pre><code>npm start</code></pre>
+            <p>若需要自定义端口，可在启动命令前设置 <code>PORT</code> 环境变量：</p>
+            <pre><code>PORT=4000 npm start</code></pre>
+          </li>
+          <li>
+            <strong>访问项目</strong>
+            <p>打开浏览器访问 <a href="http://localhost:3000" target="_blank">http://localhost:3000</a> 即可看到整合后的前端界面。</p>
+          </li>
+        </ol>
+      </section>
+
+      <section>
+        <h2>目录结构</h2>
+        <pre><code>.
+├── data/                  # 前两次任务的文本文件资源
+├── docs/                  # 项目文档（Markdown 版本）
+├── public/                # 静态资源目录，包含前端页面与开发文档 HTML 版本
+│   ├── docs/
+│   │   └── 开发文档.html
+│   ├── index.html
+│   └── styles.css
+├── src/                   # Express 服务端源码
+│   ├── index.js           # 应用入口，注册中间件与路由
+│   ├── routes/api.js      # API 路由定义
+│   └── services/textService.js
+├── package.json
+└── package-lock.json (首次执行 <code>npm install</code> 后自动生成)</code></pre>
+      </section>
+
+      <section>
+        <h2>运行机制说明</h2>
+        <ul>
+          <li><code>src/index.js</code> 中创建 Express 应用，加载日志中间件、JSON 解析中间件以及静态资源服务。</li>
+          <li><code>/api</code> 路径下由 <code>routes/api.js</code> 提供接口，当前包含：
+            <ul>
+              <li><code>GET /api/health</code>：健康检查。</li>
+              <li><code>GET /api/texts</code>：读取 <code>data/</code> 目录下所有 <code>.txt</code> 文件并返回内容。</li>
+              <li><code>GET /api/texts/:name</code>：按文件名（不含 <code>.txt</code> 后缀）返回单个文本内容。</li>
+            </ul>
+          </li>
+          <li>其余 GET 请求均回退到 <code>public/index.html</code>，用于前端路由或直接展示页面。</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>数据源管理</h2>
+        <ul>
+          <li>所有文本文件统一放置在 <code>data/</code> 目录。</li>
+          <li>新增文本时仅需将 <code>.txt</code> 文件置入该目录，无需改动源码，接口会自动收集。</li>
+          <li>如需支持其他类型文件，可扩展 <code>services/textService.js</code> 中的文件过滤逻辑。</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>前端说明</h2>
+        <ul>
+          <li><code>public/index.html</code> 为主页面，使用原生 ES Module 编写的脚本请求 <code>/api</code> 接口。</li>
+          <li><code>styles.css</code> 提供基础样式和响应式布局。</li>
+          <li>页脚提供文档入口，链接到本页面，便于部署后直接查看。</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>部署建议</h2>
+        <ol>
+          <li><strong>安装依赖</strong>（仅需一次）：<code>npm install</code></li>
+          <li><strong>构建流程</strong>：本项目为服务端渲染 + 静态资源，无需额外构建步骤。</li>
+          <li><strong>生产启动</strong>：<code>npm start</code></li>
+          <li><strong>进程守护</strong>：推荐搭配 <code>pm2</code>、<code>systemd</code> 或容器方式运行，以保证高可用。</li>
+        </ol>
+      </section>
+
+      <section>
+        <h2>常见问题</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>问题</th>
+              <th>解决方案</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>启动报错 <code>EADDRINUSE</code></td>
+              <td>检查端口是否被占用，修改 <code>PORT</code> 或释放端口。</td>
+            </tr>
+            <tr>
+              <td>浏览器无法加载文本列表</td>
+              <td>查看后端日志，确认 <code>data/</code> 目录是否存在 <code>.txt</code> 文件以及文件权限。</td>
+            </tr>
+            <tr>
+              <td>页面样式错乱</td>
+              <td>确保 <code>/public/styles.css</code> 能被正常访问，或检查浏览器缓存。</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h2>后续扩展方向</h2>
+        <ul>
+          <li>增加文件上传接口，实现在线维护文本内容。</li>
+          <li>引入数据库（如 SQLite）统一管理文本资源元数据。</li>
+          <li>使用前端框架（React/Vue）打造更丰富的展示交互。</li>
+          <li>编写自动化测试，确保接口行为的稳定性。</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>许可协议</h2>
+        <p>本项目默认使用 MIT 许可证，可在企业和个人项目中自由使用，建议在部署时保留版权声明。</p>
+      </section>
+    </main>
+    <footer>
+      <p><a href="/">返回首页</a></p>
+    </footer>
+  </body>
+</html>
